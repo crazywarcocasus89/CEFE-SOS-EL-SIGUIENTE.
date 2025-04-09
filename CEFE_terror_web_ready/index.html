@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>CEFE - El destino oscuro</title>
+    <style>
+        @keyframes flash {
+            0% { background-color: #000; }
+            50% { background-color: #300; }
+            100% { background-color: #000; }
+        }
+
+        body {
+            background-color: #000000;
+            color: #e60000;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .flash {
+            animation: flash 0.2s;
+        }
+
+        #countdown {
+            font-size: 72px;
+            background-color: rgba(50, 0, 0, 0.8);
+            padding: 30px 60px;
+            border-radius: 15px;
+            box-shadow: 0 0 25px red;
+            margin-bottom: 40px;
+        }
+        #final-message {
+            font-size: 48px;
+            margin-top: 40px;
+            color: #ff0000;
+            display: none;
+        }
+        #morse {
+            position: fixed;
+            bottom: 10px;
+            right: 15px;
+            font-size: 10px;
+            color: #ff4444;
+            font-family: monospace;
+            opacity: 0.6;
+        }
+        #rockImage {
+            width: 300px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            filter: drop-shadow(0 0 10px red);
+        }
+        #rockImage:hover {
+            transform: scale(1.05);
+        }
+        #lyrics {
+            margin-top: 30px;
+            font-size: 24px;
+            color: #ffffff;
+            padding: 0 40px;
+            min-height: 60px;
+            border-top: 1px solid #550000;
+            width: 80%;
+        }
+        .typewriter {
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            animation: typing 3s steps(30, end), blink-caret 0.75s step-end infinite;
+            border-right: 2px solid #fff;
+        }
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #fff; }
+        }
+    
+    @keyframes redFlash {
+        0%   { background-color: #000; }
+        25%  { background-color: #200; }
+        50%  { background-color: #400; }
+        75%  { background-color: #200; }
+        100% { background-color: #000; }
+    }
+    body.flashing-red {
+        animation: redFlash 0.6s infinite;
+    }
+</style>
+
+
+    <style>
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+        body.glitch {
+            animation: shake 0.5s;
+            animation-iteration-count: 10;
+        }
+    
+    @keyframes redFlash {
+        0%   { background-color: #000; }
+        25%  { background-color: #200; }
+        50%  { background-color: #400; }
+        75%  { background-color: #200; }
+        100% { background-color: #000; }
+    }
+    body.flashing-red {
+        animation: redFlash 0.6s infinite;
+    }
+</style>
+
+    </head>
+    
+<body>
+
+    <audio id="bgAudio" src="terror_background.mp3" autoplay loop></audio>
+    <div id="countdown"></div>
+    <div id="final-message">CEFE... ya no hay vuelta atrás.</div>
+    <div id="morse">.-.. . ... / .--. .- ... .- .-.-.- / . ... / .-.. . / .---- --.- ....- / -.. . / .- -... .-. .. .-.. / .----. ...</div>
+
+    <img id="rockImage" src="homero_new.png" alt="Homero maldito">
+    <audio id="myAudio" src="audio_cefe.wav"></audio>
+
+    <div id="lyrics"></div>
+
+    <script>
+        const countdownDate = new Date(new Date().getTime() + 9 * 24 * 60 * 60 * 1000);
+        const countdown = document.getElementById("countdown");
+        const finalMessage = document.getElementById("final-message");
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = countdownDate - now;
+
+            if (distance < 0) {
+                countdown.style.display = "none";
+                finalMessage.style.display = "block";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            countdown.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        const audio = document.getElementById("myAudio");
+        const bgAudio = document.getElementById("bgAudio");
+        const rockImage = document.getElementById("rockImage");
+        const lyricsDiv = document.getElementById("lyrics");
+
+        const lyrics = [
+            { time: 0.1, text: "Son las 3 de la mañana" },
+            { time: 1.6, text: "Y estoy en tu ventana" },
+            { time: 3.2, text: "Buscándote amor" },
+            { time: 5.0, text: "Dime por favor" },
+            { time: 6.8, text: "Lo que quiero que me digas" },
+            { time: 9.0, text: "¿Qué le va a pasar a Cefe el 17 de abril?" }
+        ];
+
+        rockImage.addEventListener("click", function () {
+            audio.currentTime = 0;
+            audio.play();
+document.body.classList.add('flashing-red');
+            bgAudio.pause();
+            document.body.classList.add("flash");
+            setTimeout(() => {
+                document.body.classList.remove("flash");
+            }, 300);
+
+            lyricsDiv.innerHTML = "";
+            lyrics.forEach((line) => {
+                setTimeout(() => {
+                    lyricsDiv.innerHTML = `<span class='typewriter'>${line.text}</span>`;
+                }, line.time * 1000);
+            });
+        });
+    
+        const screamSound = new Audio('screamer_scream.mp3');
+        audio.addEventListener('ended', function() {
+            const screamer = document.getElementById("screamer");
+            screamer.style.display = "block";
+document.body.classList.remove('flashing-red');
+document.body.classList.add('glitch');
+            screamSound.play();
+        });
+    </script>
+    
+
+
+    <img id="screamer" src="screamer.png" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; z-index:9999; object-fit:cover;">
+
+    <script>
+        audio.addEventListener('ended', function() {
+            const screamer = document.getElementById("screamer");
+            screamer.style.display = "block";
+document.body.classList.remove('flashing-red');
+document.body.classList.add('glitch');
+
+            // También podríamos agregar sonido extra aquí si se quiere
+        });
+    
+        const screamSound = new Audio('screamer_scream.mp3');
+        audio.addEventListener('ended', function() {
+            const screamer = document.getElementById("screamer");
+            screamer.style.display = "block";
+document.body.classList.remove('flashing-red');
+document.body.classList.add('glitch');
+            screamSound.play();
+        });
+    </script>
+    
+    </body>
+    
+</html>
